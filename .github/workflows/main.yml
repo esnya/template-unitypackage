@@ -19,7 +19,7 @@ jobs:
       - run: |
           find Assets -name \*.meta > metaList
           mkdir build
-          cp -r README.md LICENSE CHANGELOG build
+          cp -r README.md LICENSE CHANGELOG.md build
           cp README.md build/README.txt
           cat metaList
       - uses: pCYSl5EDgo/create-unitypackage@master
@@ -47,8 +47,10 @@ jobs:
         with:
           path: ${{needs.prebuild.outputs.package_name}}
           filename: '${{needs.prebuild.outputs.package_name}}.zip'
+      - run: mkdir release
+      - run: mv ${{needs.prebuild.outputs.package_name}}/${{needs.prebuild.outputs.package_name}}.unitypackage ${{needs.prebuild.outputs.package_name}}.zip release/
       - name: Release
         uses: fnkr/github-action-ghr@v1
         env:
-          GHR_PATH: '${{needs.prebuild.outputs.package_name}}.zip'
+          GHR_PATH: release
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
