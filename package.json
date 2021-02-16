@@ -1,17 +1,24 @@
 {
   "name": "com.nekometer.esnya.template",
-  "version": "1.0.0",
   "displayName": "EsnyaUnitypackageTemplate",
-  "unity": "2018.4",
-  "description": " Template repository for uinitypackage.",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Template repository for uinitypackage.",
   "keywords": [
     "VRChat",
     "Unity"
   ],
-  "scripts": {
-    "version": "npx cross-var npx gitmoji-changelog $npm_package_version && git add CHANGELOG.md"
-  },
-  "author": "esnya",
   "license": "MIT",
-  "private": true
+  "author": "esnya",
+  "devDependencies": {
+    "@commitlint/cli": "^11.0.0",
+    "@commitlint/config-conventional": "^11.0.0",
+    "@commitlint/core": "^11.0.0",
+    "@semantic-release/github": "^7.2.0",
+    "commitlint-config-gitmoji": "^2.1.10",
+    "husky": "^4.3.8",
+    "semantic-release": "^17.3.7",
+    "semantic-release-gitmoji": "^1.3.4"
+  },
+  "unity": "2018.4"
 }
