@@ -33,7 +33,13 @@
     "branches": [
       "master",
       {
-        "name": "next",
+        "name": "beta",
+        "channel": "next",
+        "prerelease": true
+      },
+      {
+        "name": "alpha",
+        "channel": "next",
         "prerelease": true
       }
     ],
