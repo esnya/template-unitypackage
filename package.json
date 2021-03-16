@@ -23,6 +23,7 @@
     "@commitlint/cli": "^11.0.0",
     "@commitlint/config-conventional": "^11.0.0",
     "@commitlint/core": "^11.0.0",
+    "@semantic-release/exec": "^5.0.0",
     "@semantic-release/github": "^7.2.0",
     "commitlint-config-gitmoji": "^2.1.10",
     "husky": "^4.3.8",
@@ -45,6 +46,12 @@
     ],
     "plugins": [
       "semantic-release-gitmoji",
+      [
+        "@semantic-release/exec",
+        {
+          "verifyReleaseCmd": "sh ./.scripts/before-release.sh ${nextRelease.version}"
+        }
+      ],
       [
         "@semantic-release/github",
         {
