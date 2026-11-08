@@ -7,11 +7,31 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
-          node-version: lts/*
+          node-version: '24.22.1'
           registry-url: https://npm.pkg.github.com
           scope: com.nekometer.esnya
-      - run: npm ci
-      - run: npx semantic-release
+      - run: node --version && npm ci --ignore-scripts --no-audit --no-fund
+      - name: Verify release tooling without side effects
+        run: node .github/scripts/release-tooling-smoke.mjs . template
+      - name: Verify generated archive caller fixture
+        run: node .github/scripts/archive-compat-smoke.mjs . .github/scripts/create-unitypackage.ts
+      - name: Check package export inputs
+        id: export_inputs
+        run: |
+          has_packages=false
+          for root in Packages packages; do
+            if [ -d "$root" ] && find "$root" -mindepth 2 -maxdepth 2 -name package.json -print -quit | grep -q .; then
+              has_packages=true
+            fi
+          done
+          if [ "$has_packages" = true ]; then
+            echo "has_packages=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "has_packages=false" >> "$GITHUB_OUTPUT"
+            echo "No workspace packages to export; release skipped."
+          fi
+      - if: ${{ !startsWith(github.ref, 'refs/heads/codex/') && steps.export_inputs.outputs.has_packages == 'true' }}
+        run: npx semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.GITHUB_TOKEN }}

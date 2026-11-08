@@ -31,11 +31,11 @@ async function createUnityPackage(workspace: string)
     await fs.promises.copyFile(`${workspace}.meta`, `${rootDir}.meta`);
 
     const metaFiles = glob.sync(`${tmp}/**/*.meta`.replace(/\\/g, "/"));
-    await archive(
-      metaFiles.map((p) => path.relative(tmp, p)),
-      tmp,
-      unitypackageName
-    );
+    await archive({
+      files: metaFiles.map((p) => p.replace(/\.meta$/, "")),
+      root: tmp,
+      dest: unitypackageName,
+    });
   } finally {
     await new Promise<void>((resolve, reject) =>
       rimraf(tmp, (e) => (e ? reject(e) : resolve()))
